@@ -6,7 +6,7 @@
 
 ## 项目简介
 
-**Lively-Nostalgia** 是一套基于 Complementary Reimagined r5 代码的 Minecraft Java 版光影包，专为怀旧视觉风格设计。
+**Lively-Nostalgia** 是一套参考 Complementary Reimagined r5 的 Minecraft Java 版光影包，专为怀旧视觉风格设计。
 
 设计理念：
 
@@ -86,7 +86,7 @@
 
 ## 许可
 
-GNU General Public License v3.0 · [github.com/Open-code-Studio](https://github.com/Open-code-Studio/Lively-Visual-Effects)
+GNU General Public License v3.0 · [github.com/lively-Studio](https://github.com/lively-Studio/Lively-Nostalgia)
 
 ---
 

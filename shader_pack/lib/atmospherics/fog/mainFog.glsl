@@ -72,7 +72,13 @@
     #include "/lib/atmospherics/fog/caveFactor.glsl"
 
     void DoCaveFog(inout vec4 color, float lViewPos) {
-        float fog = GetCaveFactor() * (0.9 - 0.9 * exp(- lViewPos * 0.015));
+        #if SHADER_STYLE == 3
+            // 怀旧：洞穴浓雾，致敬旧版本 MC 的"虚空迷雾"
+            float fog = GetCaveFactor() * (0.9 - 0.9 * exp(- lViewPos * 0.022)) * 1.25;
+            fog = min1(fog);
+        #else
+            float fog = GetCaveFactor() * (0.9 - 0.9 * exp(- lViewPos * 0.015));
+        #endif
 
         color = mix(color, vec4(caveFogColor, 0.0), fog);
     }

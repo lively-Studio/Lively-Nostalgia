@@ -5,8 +5,17 @@
         vec3 skyColorSqrt = sqrt(skyColor);
         // Doing these things because vanilla skyColor gets to 0 during a thunderstorm
         float invRainStrength2 = (1.0 - rainStrength) * (1.0 - rainStrength);
-        vec3 skyColorM = mix(max(skyColorSqrt, vec3(0.63, 0.67, 0.73)), skyColorSqrt, invRainStrength2);
-        vec3 skyColorM2 = mix(max(skyColor, sunFactor * vec3(0.265, 0.295, 0.35)), skyColor, invRainStrength2);
+        #if SHADER_STYLE == 3
+            // 怀旧调色：天空略降饱和 + 暖偏移（雾色由此派生，故一并变暖）
+            vec3 nostalgiaSkyBase  = mix(max(skyColorSqrt, vec3(0.63, 0.67, 0.73)), skyColorSqrt, invRainStrength2);
+            vec3 nostalgiaSkyBase2 = mix(max(skyColor, sunFactor * vec3(0.265, 0.295, 0.35)), skyColor, invRainStrength2);
+            float nostalgiaSkyLum  = dot(nostalgiaSkyBase, vec3(0.299, 0.587, 0.114));
+            vec3 skyColorM  = mix(vec3(nostalgiaSkyLum), nostalgiaSkyBase  * vec3(1.03, 1.00, 0.93), 0.90);
+            vec3 skyColorM2 = mix(vec3(nostalgiaSkyLum), nostalgiaSkyBase2 * vec3(1.03, 1.00, 0.93), 0.90);
+        #else
+            vec3 skyColorM = mix(max(skyColorSqrt, vec3(0.63, 0.67, 0.73)), skyColorSqrt, invRainStrength2);
+            vec3 skyColorM2 = mix(max(skyColor, sunFactor * vec3(0.265, 0.295, 0.35)), skyColor, invRainStrength2);
+        #endif
 
         #ifdef SPECIAL_BIOME_WEATHER
             vec3 nmscSnowM = inSnowy * vec3(-0.1, 0.3, 0.6);

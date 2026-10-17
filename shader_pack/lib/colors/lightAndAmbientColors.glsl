@@ -74,8 +74,18 @@
         vec3 rainLightColor   = mix(nightRainLightColor, dayRainLightColor * (1.0 - rainShadowVisReduce), sunVisibility2) * 2.5;
         vec3 rainAmbientColor = mix(nightRainAmbientColor, dayRainAmbientColor * (1.0 + rainShadowVisReduce), sunVisibility2);
 
-        vec3 lightColor   = mix(clearLightColor, rainLightColor, rainFactor);
-        vec3 ambientColor = mix(clearAmbientColor, rainAmbientColor, rainFactor);
+        #if SHADER_STYLE == 3
+            // 怀旧调色：略降饱和 + 暖色偏移，还原旧版本 MC 的朴素暖光
+            vec3 nostalgiaLightBase   = mix(clearLightColor, rainLightColor, rainFactor);
+            vec3 nostalgiaAmbientBase = mix(clearAmbientColor, rainAmbientColor, rainFactor);
+            float nostalgiaLightLum   = dot(nostalgiaLightBase,   vec3(0.299, 0.587, 0.114));
+            float nostalgiaAmbientLum = dot(nostalgiaAmbientBase, vec3(0.299, 0.587, 0.114));
+            vec3 lightColor   = mix(vec3(nostalgiaLightLum),   nostalgiaLightBase   * vec3(1.05, 1.00, 0.88), 0.86);
+            vec3 ambientColor = mix(vec3(nostalgiaAmbientLum), nostalgiaAmbientBase * vec3(1.03, 1.00, 0.94), 0.90);
+        #else
+            vec3 lightColor   = mix(clearLightColor, rainLightColor, rainFactor);
+            vec3 ambientColor = mix(clearAmbientColor, rainAmbientColor, rainFactor);
+        #endif
     #elif defined NETHER
         vec3 lightColor   = vec3(0.0);
         vec3 ambientColor = (netherColor + 0.5 * lavaLightColor) * (0.9 + 0.45 * vsBrightness);
